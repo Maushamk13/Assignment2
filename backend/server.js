@@ -3,12 +3,18 @@ const app = express();
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 var routes = require('./routes/routes');
+var cors = require('cors');
 
-app.listen(3000, function (error) {
-  if (error)
-    console.log("Error");
-  else
-    console.log("Started");
+app.use(cors(
+    {
+        origin: 'http://localhost:4200'
+    }
+) )
+
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
 mongoose.connect("mongodb://0.0.0.0:27017/Assignment", {
