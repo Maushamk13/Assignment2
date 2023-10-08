@@ -25,36 +25,22 @@ module.exports.createUserDBService = (userDetails) => {
     });
 }
 
-module.exports.loginUserDBService = (userDetails) => 
-{
-    return new Promise(function myFn(resolve, reject)
-    {
-        userModel.findOne({ email: userDetails.email},function getresult(errorvalue, result)
-        {
-            if(errorvalue)
-            {
-                reject({status: false, msg: "Invalid Data"});
-            }
-            else 
-            {
-                if(result !=undefined && result !=null)
-                {
-                    var decrypted = encryptor.decrypt(result.password);
+module.exports.loginUserDBService = async (userDetails) => {
+    try {
+        const result = await userModel.findOne({ email: userDetails.email }).exec();
 
-                    if(decrypted == userDetails.password)
-                    {
-                        resolve({status: true,msg: "User Validated Successfully"});
-                    }
-                    else 
-                    {
-                        reject({status: false,msg: "User Validation Failed"});
-                    }
-                }
-                else
-                {
-                    reject({status: false, msg: "User Errored Details"});
-                }
+        if (result) {
+            const decrypted = encryptor.decrypt(result.password);
+
+            if (decrypted === userDetails.password) {
+                return { status: true, msg: "User Validated Successfully" };
+            } else {
+                throw { status: false, msg: "User Validation Failed" };
             }
-        });
-    });
-}
+        } else {
+            throw { status: false, msg: "User Errored Details" };
+        }
+    } catch (error) {
+        throw { status: false, msg: "Invalid Data" };
+    }
+};
