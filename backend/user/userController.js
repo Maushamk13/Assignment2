@@ -21,4 +21,19 @@ catch(error)
 }
 }
 
-module.exports = {createUserControllerFn};
+var loginUserControllerFn = async (req, res) => {
+    var result = null;
+    try {
+        result = await userService.loginUserDBService(req.body);
+        if (result.status){
+                res.send({ "status": true, "message": result.msg });
+        } else {
+                res.send({ "stuatus": false, "message": result.msg });
+        }
+    } catch (error) {
+        console.log(error);
+        res.send({"status": false, "message": error.msg});
+    }
+}
+
+module.exports = {createUserControllerFn, loginUserControllerFn};
