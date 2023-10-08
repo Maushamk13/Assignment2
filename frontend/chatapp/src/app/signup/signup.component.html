@@ -1,9 +1,34 @@
+<style>
+    /* Style for the card header */
+    .card-header {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    /* Style for the button */
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff; /* Blue color */
+        color: #fff; /* White text color */
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+
+    /* Style for the button on hover */
+    button:hover {
+        background-color: #0056b3; /* Darker blue color on hover */
+    }
+</style>
+
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header text-center font-weight-bold">
                         User Sign-up
                     </div>
                     <div class="card-body">
@@ -36,7 +61,7 @@
                                 <label for="group">Group:</label>
                                 <input type="number" class="form-control" id="group" name="group" [(ngModel)]="group" [ngModelOptions]="{standalone: true}" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Sign up</button>
+                            <button type="submit" class="btn btn-primary btn-block">Sign up</button>
                         </form>
                     </div>
                 </div>
