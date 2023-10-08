@@ -27,20 +27,22 @@ module.exports.createUserDBService = (userDetails) => {
 
 module.exports.loginUserDBService = async (userDetails) => {
     try {
-        const result = await userModel.findOne({ email: userDetails.email }).exec();
+        const user = await userModel.findOne({ email: userDetails.email }).exec();
 
-        if (result) {
-            const decrypted = encryptor.decrypt(result.password);
+        if (user) {
+            const decrypted = encryptor.decrypt(user.password);
 
             if (decrypted === userDetails.password) {
-                return { status: true, msg: "User Validated Successfully" };
+                // Return all user information except the password
+                const { password, ...userData } = user.toObject();
+                return userData;
             } else {
-                throw { status: false, msg: "User Validation Failed" };
+                throw new Error("User Validation Failed");
             }
         } else {
-            throw { status: false, msg: "User Errored Details" };
+            throw new Error("User Errored Details");
         }
     } catch (error) {
-        throw { status: false, msg: "Invalid Data" };
+        throw error;
     }
 };
