@@ -22,17 +22,16 @@ catch(error)
 }
 
 var loginUserControllerFn = async (req, res) => {
-    var result = null;
     try {
-        result = await userService.loginUserDBService(req.body);
-        if (result.status){
-                res.send({ "status": true, "email": req.body.email, "message": result.msg });
+        const user = await userService.loginUserDBService(req.body);
+        if (user) {
+            res.send({ "status": true, "user": user, "message": "User Validated Successfully" });
         } else {
-                res.send({ "stuatus": false, "message": result.msg });
+            res.send({ "status": false, "message": "User Validation Failed" });
         }
     } catch (error) {
-        console.log(error);
-        res.send({"status": false, "message": error.msg});
+        console.error(error);
+        res.status(500).send({ "status": false, "message": "Internal Server Error" });
     }
 }
 

@@ -26,7 +26,11 @@ module.exports.createUserDBService = (userDetails) => {
 }
 
 module.exports.loginUserDBService = async (userDetails) => {
+    let errorHandled = false; // Flag to track error handling
+
     try {
+        console.log(`Processing login for email: ${userDetails.email}`);
+
         const user = await userModel.findOne({ email: userDetails.email }).exec();
 
         if (user) {
@@ -40,9 +44,15 @@ module.exports.loginUserDBService = async (userDetails) => {
                 throw new Error("User Validation Failed");
             }
         } else {
-            throw new Error("User Errored Details");
+            throw new Error("User not found in the database");
         }
     } catch (error) {
-        throw error;
+        if (!errorHandled) {
+            console.error(`Error in loginUserDBService for email: ${userDetails.email}`);
+            errorHandled = true; // Set the flag to indicate error handling
+        }
     }
 };
+
+
+
