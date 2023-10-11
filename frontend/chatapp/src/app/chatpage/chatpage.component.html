@@ -1,4 +1,4 @@
-<div>
+<!-- <div>
   <h2>Welcome, {{ firstname }}</h2>
 </div>
 
@@ -16,4 +16,48 @@
     <button (click)="sendMessage()">Send</button>
   </div>
 </div>
+ -->
+
+ <div>
+  <h2>Welcome, {{ firstname }}</h2>
+</div>
+
+<div class="chat-container">
+  <div class="chat-messages">
+    <div *ngFor="let msg of messages">
+      
+      <div class="message">
+        <span class="user">{{ msg.user }}:</span>
+        <span class="text">{{ msg.message }}</span>
+      </div>
+    </div>
+  </div>
+  <div class="message-input">
+    <input [(ngModel)]="message" placeholder="Type a message" (keydown.enter)="sendMessage()" />
+    <button (click)="sendMessage()">Send</button>
+  </div>
+</div>
+
+<!-- Video container to display remote video streams 
+<div class="video-container">
+  <div *ngFor="let remoteVideo of remoteVideos">
+    <video [srcObject]="remoteVideo" autoplay></video>
+  </div>
+</div>
+<div class="video-controls">
+  <button (click)="startVideoCall()" [disabled]="videoCallId">Start Video Call</button>
+</div>
+-->
+
+<div class="video-grid">
+  <div *ngFor = "let video of videos">
+    <span *ngIf= "video.userId !== userId; else currentUserVideoLabel">{{video}}</span>
+    <ng-template #currentUserVideoLabel>
+      <span>You</span>
+    </ng-template>
+    <video [srcObject]="video.srcObject" (loadedmetadata)="onloadedmetadata($event)" [muted]="video.muted"></video>
+  </div>
+</div>
+
+
 
