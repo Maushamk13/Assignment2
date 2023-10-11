@@ -1,21 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Socket, io } from 'socket.io-client';
+import { Socket } from 'ngx-socket-io';
+
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ChatService {
+  constructor(private socket: Socket) {}
 
-  private socket: Socket;
-  private url = 'http://localhost:3000'
+  joinRoom(room: string, user: string) {
+    this.socket.emit('join', { room, user });
+  }
 
-  constructor() { 
-    this.socket = io(this.url);
+  sendMessage(room: string, user: string, message: string) {
+    this.socket.emit('message', { room, user, message });
   }
-  joinRoom(data: any) : void {
-    this.socket.emit('join', data);
+
+  onNewMessage() {
+    return this.socket.fromEvent('new message');
   }
-  sendMessage(data: any) : void {
-    this.socket.emit('message', data);
+
+  onUserJoined() {
+    return this.socket.fromEvent('user joined');
   }
 }
+

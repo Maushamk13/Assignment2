@@ -1,4 +1,19 @@
 <div>
-    <h1>Welcome, {{ firstname }}</h1>
+  <h2>Welcome, {{ firstname }}</h2>
+</div>
+
+<div class="chat-container">
+  <div class="chat-messages">
+    <div *ngFor="let msg of messages">
+      <div class="message">
+        <span class="user">{{ msg.user }}:</span>
+        <span class="text">{{ msg.message }}</span>
+      </div>
+    </div>
   </div>
-  
+  <div class="message-input">
+    <input [(ngModel)]="message" placeholder="Type a message" (keydown.enter)="sendMessage()" />
+    <button (click)="sendMessage()">Send</button>
+  </div>
+</div>
+
