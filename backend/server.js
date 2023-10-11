@@ -61,20 +61,6 @@ io.on('connection', (socket) => {
   socket.on('image', (data) => {
     io.in(data.room).emit('receive image', { user: data.user, image: data.image, isImage: data.isImage, userId: data.userId });
   });
-
-  // // Handle video call initiation with UUID
-  // socket.on('startVideoCall', (data) => {
-  //   // Generate a UUID for the video call
-  //   const videoCallId = uuid.v4();
-
-  //   // Broadcast the video call initiation to other members of the room
-  //   io.to(data.room).emit('videoCallStarted', { user: data.user, videoCallId });
-  // });
-
-  // // Handle disconnect and remove the socket from the groupToSocketMap
-  // socket.on('disconnect', () => {
-  //   for (const group in groupToSocketMap) {
-  //     groupToSocketMap[group] = groupToSocketMap[group].filter((s) => s !== socket);
-  //   }
-  // });
 });
+
+module.exports = app;

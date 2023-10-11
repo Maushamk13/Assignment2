@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "unitTest": "mocha ./unitTest/test.js",
+    "test": "mocha ./integrationTest/test.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,5 +17,10 @@
     "simple-encryptor": "^4.0.0",
     "socket.io": "^4.7.2",
     "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.10",
+    "chai-http": "^4.4.0",
+    "mocha": "^10.2.0"
   }
 }
