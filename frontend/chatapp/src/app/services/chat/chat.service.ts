@@ -63,4 +63,14 @@ export class ChatService {
   onUserJoined() {
     return this.socket.fromEvent('user joined');
   }
+  sendImage(room: string, user: string, image: string, isImage: boolean) {
+    // Assuming you have a socket event for sending images, emit it with the image data.
+    console.log({ room, user, image, isImage })
+    this.socket.emit('image', { room, user, image, isImage });
+  }
+  
+  // Implement methods to handle image messages received from the server
+  onImageReceived() {
+    return this.socket.fromEvent('receive image');
+  }
 }

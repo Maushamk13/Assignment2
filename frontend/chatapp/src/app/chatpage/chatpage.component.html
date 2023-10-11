@@ -17,7 +17,6 @@
   </div>
 </div>
  -->
-
  <div>
   <h2>Welcome, {{ firstname }}</h2>
 </div>
@@ -25,18 +24,25 @@
 <div class="chat-container">
   <div class="chat-messages">
     <div *ngFor="let msg of messages">
-      
       <div class="message">
         <span class="user">{{ msg.user }}:</span>
-        <span class="text">{{ msg.message }}</span>
+        <ng-container *ngIf="msg.isImage">
+          <img [src]="msg.image" alt="Received Image">
+        </ng-container>
+        <ng-container *ngIf="!msg.isImage">
+          <span class="text">{{ msg.message }}</span>
+        </ng-container>
       </div>
     </div>
   </div>
   <div class="message-input">
+    <input type="file" (change)="onFileSelected($event)" accept="image/*">
+    <button (click)="sendImage()">Send Image</button>
     <input [(ngModel)]="message" placeholder="Type a message" (keydown.enter)="sendMessage()" />
     <button (click)="sendMessage()">Send</button>
   </div>
 </div>
+
 
 <!-- Video container to display remote video streams 
 <div class="video-container">
@@ -49,7 +55,6 @@
 </div>
 
 
--->
 <div class="video-container">
   <div *ngFor="let remoteVideo of remoteVideos" class="col-md-6">
     <video [srcObject]="remoteVideo" autoplay class="img-fluid"></video>
@@ -59,6 +64,19 @@
 <div class="video-controls">
   <button (click)="joinVideoCall()" class="btn btn-primary">Start Video Call</button>
 </div>
+
+-->
+
+<div class="video-container">
+  <div *ngFor="let remoteVideo of remoteVideos" class="col-md-6">
+    <video [srcObject]="remoteVideo" autoplay class="img-fluid"></video>
+  </div>
+</div>
+
+<div class="video-controls">
+  <button (click)="joinVideoCall()" class="btn btn-primary">Start Video Call</button>
+</div>
+
 
 
 

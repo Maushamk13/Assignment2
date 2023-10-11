@@ -5,11 +5,6 @@ import { Socket } from 'ngx-socket-io';
 import { ChatService } from '../services/chat/chat.service';
 import Peer from 'peerjs';
 
-interface VideoElement {
-  muted: boolean;
-  srcObject: MediaStream;
-  userId: string;
-}
 
 @Component({
   selector: 'app-chatpage',
@@ -24,10 +19,13 @@ export class ChatpageComponent implements OnInit {
   message: string = "";
   messages: any[] = [];
   videoCallId: string = "";
-  videos: VideoElement[] = [];
   remoteVideos: MediaStream[] = []; // Track remote users' video streams
   myPeer: Peer | null = null;
   myVideoStream: MediaStream = new MediaStream();
+  isVideoCallActive: boolean = false;
+  selectedImage: File | null = null;  // To store the selected image file
+  selectedImageUrl: string | null = null;  // To store the URL of the selected image for display
+
 
   constructor(
     private route: ActivatedRoute,
@@ -46,10 +44,16 @@ export class ChatpageComponent implements OnInit {
           this.firstname = this.user.firstname;
           this.group = this.user.group;
           this.socketServices.joinRoom(`group_${this.group}`, this.firstname);
-
+          this.socketServices.onImageReceived().subscribe((data: any) => {
+            console.log("dataa", data);
+            this.messages.push(data);  // Set the received image data 
+          });
+          
           this.socketServices.onNewMessage().subscribe((data: any) => {
+            console.log(data);
             this.messages.push(data);
           });
+
 
           this.myPeer = new Peer(this.userId, {
             host: '/',
@@ -123,6 +127,30 @@ export class ChatpageComponent implements OnInit {
       this.message = "";
     }
   }
+
+  sendImage() {
+    if (this.selectedImageUrl){
+      
+    this.socketServices.sendImage(`group_${this.group}`, this.firstname, this.selectedImageUrl, true);
+    console.log(this.selectedImage);
+    this.clearSelectedImage();
+    }
+  }
+  clearSelectedImage() {
+    this.selectedImage = null;
+    this.selectedImageUrl = null;
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0]; // Get the selected file
+    if (file) {
+      this.selectedImage = file;  // Store the selected image
+      this.selectedImageUrl = URL.createObjectURL(file); // Create a URL for the image to display
+      // Assuming you have a function to send the image using your chat service, you can call it here.
+    }
+  }
+
+
   joinVideoCall() {
     const remoteUserId = prompt('Enter the user ID you want to call:');
     if (remoteUserId) {
@@ -139,6 +167,10 @@ export class ChatpageComponent implements OnInit {
       });
     }
   }
+
+  
+
+
 
 }
 

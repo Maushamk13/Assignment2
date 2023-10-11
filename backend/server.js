@@ -58,6 +58,10 @@ io.on('connection', (socket) => {
     io.in(data.room).emit('new message', { user: data.user, message: data.message });
   });
 
+  socket.on('image', (data) => {
+    io.in(data.room).emit('receive image', { user: data.user, image: data.image, isImage: data.isImage });
+  });
+
   // // Handle video call initiation with UUID
   // socket.on('startVideoCall', (data) => {
   //   // Generate a UUID for the video call
