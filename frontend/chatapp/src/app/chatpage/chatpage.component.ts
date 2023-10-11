@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { Socket } from 'ngx-socket-io';
 import { ChatService } from '../services/chat/chat.service';
 import Peer from 'peerjs';
-import { v4 as uuidv4 } from 'uuid';
 
 interface VideoElement {
   muted: boolean;
@@ -68,7 +67,6 @@ export class ChatpageComponent implements OnInit {
             })
             .then((stream) => {
               this.myVideoStream = stream;
-              this.addMyVideo(stream);
 
               this.myPeer?.on('call', (call) => {
                 if (this.myPeer && this.group === this.user.group) { // Check if users have the same group
@@ -91,7 +89,6 @@ export class ChatpageComponent implements OnInit {
                     });
         
                     call.on('close', () => {
-                      this.videos = this.videos.filter((video) => video.userId !== userId);
                       this.remoteVideos = this.remoteVideos.filter((video) => video.id !== userId);
                     });
                   }, 1000);
@@ -99,7 +96,6 @@ export class ChatpageComponent implements OnInit {
               });
         
               this.socket.on('user-disconnected', (userId: string) => {
-                this.videos = this.videos.filter((video) => video.userId !== userId);
                 this.remoteVideos = this.remoteVideos.filter((video) => video.id !== userId);
               });
             })
@@ -108,14 +104,6 @@ export class ChatpageComponent implements OnInit {
             });
         }
       });
-    });
-  }
-
-  addMyVideo(stream: MediaStream) {
-    this.videos.push({
-      muted: true,
-      srcObject: stream,
-      userId: this.userId,
     });
   }
 

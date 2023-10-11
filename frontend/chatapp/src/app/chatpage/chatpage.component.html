@@ -51,14 +51,15 @@
 
 -->
 <div class="video-container">
-  <div *ngFor="let remoteVideo of remoteVideos">
-    <video [srcObject]="remoteVideo" autoplay></video>
+  <div *ngFor="let remoteVideo of remoteVideos" class="col-md-6">
+    <video [srcObject]="remoteVideo" autoplay class="img-fluid"></video>
   </div>
 </div>
 
 <div class="video-controls">
-  <button (click)="joinVideoCall()">Start Video Call</button> <!-- Add this button -->
+  <button (click)="joinVideoCall()" class="btn btn-primary">Start Video Call</button>
 </div>
+
 
 
 
