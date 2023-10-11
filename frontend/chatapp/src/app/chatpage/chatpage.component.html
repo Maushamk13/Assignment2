@@ -47,17 +47,20 @@
 <div class="video-controls">
   <button (click)="startVideoCall()" [disabled]="videoCallId">Start Video Call</button>
 </div>
--->
 
-<div class="video-grid">
-  <div *ngFor = "let video of videos">
-    <span *ngIf= "video.userId !== userId; else currentUserVideoLabel">{{video}}</span>
-    <ng-template #currentUserVideoLabel>
-      <span>You</span>
-    </ng-template>
-    <video [srcObject]="video.srcObject" (loadedmetadata)="onloadedmetadata($event)" [muted]="video.muted"></video>
+
+-->
+<div class="video-container">
+  <div *ngFor="let remoteVideo of remoteVideos">
+    <video [srcObject]="remoteVideo" autoplay></video>
   </div>
 </div>
+
+<div class="video-controls">
+  <button (click)="joinVideoCall()">Start Video Call</button> <!-- Add this button -->
+</div>
+
+
 
 
 
