@@ -76,47 +76,47 @@ export class ChatpageComponent implements OnInit {
           });
 
           navigator.mediaDevices
-            .getUserMedia({
-              audio: true,
-              video: true,
-            })
-            .then((stream) => {
-              this.myVideoStream = stream;
+          .getUserMedia({
+            audio: true,
+            video: true,
+          })
+          .then((stream) => {
+            this.myVideoStream = stream;
 
-              this.myPeer?.on('call', (call) => {
-                if (this.myPeer && this.group === this.user.group) { // Check if users have the same group
-                  call.answer(stream);
-                  call.on('stream', (otherUserVideoStream) => {
-                    this.addOtherUserVideo(call.metadata.userId, otherUserVideoStream);
-                  });
-                }
-              });
-
-              this.socket.on('user-connected', (userId: string) => {
-                if (this.group === this.user.group) {
-                  setTimeout(() => {
-                    const call = this.myPeer!.call(userId, this.myVideoStream, {
-                      metadata: { userId: this.userId, group: this.group },
-                    });
-        
-                    call.on('stream', (otherUserVideoStream) => {
-                      this.addOtherUserVideo(userId, otherUserVideoStream);
-                    });
-        
-                    call.on('close', () => {
-                      this.remoteVideos = this.remoteVideos.filter((video) => video.id !== userId);
-                    });
-                  }, 1000);
-                }
-              });
-        
-              this.socket.on('user-disconnected', (userId: string) => {
-                this.remoteVideos = this.remoteVideos.filter((video) => video.id !== userId);
-              });
-            })
-            .catch((err) => {
-              console.log('Error accessing media devices:', err);
+            this.myPeer?.on('call', (call) => {
+              if (this.myPeer && this.group === this.user.group) { // Check if users have the same group
+                call.answer(stream);
+                call.on('stream', (otherUserVideoStream) => {
+                  this.addOtherUserVideo(call.metadata.userId, otherUserVideoStream);
+                });
+              }
             });
+
+            this.socket.on('user-connected', (userId: string) => {
+              if (this.group === this.user.group) {
+                setTimeout(() => {
+                  const call = this.myPeer!.call(userId, this.myVideoStream, {
+                    metadata: { userId: this.userId, group: this.group },
+                  });
+      
+                  call.on('stream', (otherUserVideoStream) => {
+                    this.addOtherUserVideo(userId, otherUserVideoStream);
+                  });
+      
+                  call.on('close', () => {
+                    this.remoteVideos = this.remoteVideos.filter((video) => video.id !== userId);
+                  });
+                }, 1000);
+              }
+            });
+      
+            this.socket.on('user-disconnected', (userId: string) => {
+              this.remoteVideos = this.remoteVideos.filter((video) => video.id !== userId);
+            });
+          })
+          .catch((err) => {
+            console.log('Error accessing media devices:', err);
+          });
         }
       });
     });
@@ -177,12 +177,9 @@ export class ChatpageComponent implements OnInit {
       call.on('close', () => {
         this.remoteVideos = this.remoteVideos.filter((video) => video.id !== remoteUserId);
       });
+
     }
   }
-
-  
-
-
 
 }
 
