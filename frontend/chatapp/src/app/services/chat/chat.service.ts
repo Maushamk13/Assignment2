@@ -52,8 +52,8 @@ export class ChatService {
     this.socket.emit('join', { room, user });
   }
 
-  sendMessage(room: string, user: string, message: string) {
-    this.socket.emit('message', { room, user, message });
+  sendMessage(room: string, user: string, message: string, userId: string) {
+    this.socket.emit('message', { room, user, message, userId });
   }
 
   onNewMessage() {
@@ -63,10 +63,10 @@ export class ChatService {
   onUserJoined() {
     return this.socket.fromEvent('user joined');
   }
-  sendImage(room: string, user: string, image: string, isImage: boolean) {
+  sendImage(room: string, user: string, image: string, isImage: boolean, userId: string) {
     // Assuming you have a socket event for sending images, emit it with the image data.
     console.log({ room, user, image, isImage })
-    this.socket.emit('image', { room, user, image, isImage });
+    this.socket.emit('image', { room, user, image, isImage, userId });
   }
   
   // Implement methods to handle image messages received from the server

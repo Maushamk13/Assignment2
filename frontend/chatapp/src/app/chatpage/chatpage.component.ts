@@ -5,6 +5,8 @@ import { Socket } from 'ngx-socket-io';
 import { ChatService } from '../services/chat/chat.service';
 import Peer from 'peerjs';
 
+// import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
   selector: 'app-chatpage',
@@ -25,14 +27,19 @@ export class ChatpageComponent implements OnInit {
   isVideoCallActive: boolean = false;
   selectedImage: File | null = null;  // To store the selected image file
   selectedImageUrl: string | null = null;  // To store the URL of the selected image for display
-
+  users: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
     private socket: Socket,
     private socketServices: ChatService,
+    // private modalService: NgbModal,
   ) {}
+
+  // public open(modal: any): void {
+  //   this.modalService.open(modal);
+  // }
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
@@ -42,6 +49,10 @@ export class ChatpageComponent implements OnInit {
         if (response && response.status) {
           this.user = response.users.find((user: { _id: string }) => user._id === this.userId);
           this.firstname = this.user.firstname;
+          this.users = response.users.filter((user: { group: any[] }) => {
+            return user.group.some(group => this.user.group.includes(group));
+          });
+          
           this.group = this.user.group;
           this.socketServices.joinRoom(`group_${this.group}`, this.firstname);
           this.socketServices.onImageReceived().subscribe((data: any) => {
@@ -123,7 +134,8 @@ export class ChatpageComponent implements OnInit {
 
   sendMessage() {
     if (this.message) {
-      this.socketServices.sendMessage(`group_${this.group}`, this.firstname, this.message);
+      console.log("messages: ", this.users);
+      this.socketServices.sendMessage(`group_${this.group}`, this.firstname, this.message, this.userId);
       this.message = "";
     }
   }
@@ -131,7 +143,7 @@ export class ChatpageComponent implements OnInit {
   sendImage() {
     if (this.selectedImageUrl){
       
-    this.socketServices.sendImage(`group_${this.group}`, this.firstname, this.selectedImageUrl, true);
+    this.socketServices.sendImage(`group_${this.group}`, this.firstname, this.selectedImageUrl, true, this.userId);
     console.log(this.selectedImage);
     this.clearSelectedImage();
     }

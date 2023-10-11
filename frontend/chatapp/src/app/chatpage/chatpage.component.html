@@ -1,80 +1,205 @@
-<!-- <div>
-  <h2>Welcome, {{ firstname }}</h2>
-</div>
 
-<div class="chat-container">
-  <div class="chat-messages">
-    <div *ngFor="let msg of messages">
-      <div class="message">
-        <span class="user">{{ msg.user }}:</span>
-        <span class="text">{{ msg.message }}</span>
+<style>
+  /* Customize your styles here */
+  .chat-container {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 20px 0;
+  }
+  .chat-messages {
+    height: 300px; /* Adjust the height based on your design */
+    overflow-y: scroll;
+    padding-right: 12px;
+  }
+  .custom-file-input {
+    cursor: pointer; /* Change the cursor to a pointer when hovering over it */
+    padding: 6px 12px; /* Add padding to make it look like a button */
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 4px; /* Add border radius */
+    background-color: #f5f5f5; /* Background color */
+  }
+  /* .message {
+    display: flex;
+    margin-bottom: 4px;
+  } */
+  .message span {
+    font-size: 14px;
+  }
+  .user {
+    margin-right: 1rem;
+    align-self: flex-end;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .message img {
+      max-width: 30%; /* Limit the image width to fit the container */
+      height: auto; /* Maintain the aspect ratio */
+      margin-top: 10px; /* Add some space above the image */
+      border-radius: 16px;
+    }
+    /* Style for messages from the current user (on the right) */
+  .right {
+    text-align: right;
+    background-color: #007bff;
+    color: white;
+    border-radius: 10px;
+    margin: 10px 0;
+    padding: 10px;
+  }
+
+  /* Style for messages from other users (on the left) */
+  .left {
+    text-align: left;
+    background-color: #e5e5e5;
+    color: black;
+    border-radius: 10px;
+    margin: 10px 0;
+    padding: 10px;
+  }
+
+  .video-container {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .video-container video {
+    border-radius: 16px;
+  }
+
+  .user-list-container {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 20px 0;
+    height: 332px;
+    overflow-y: scroll;
+  }
+  ul {
+    padding-left: 0;
+  }
+  ul li {
+    list-style: none;
+  }
+  .heading-area {
+    display: flex;
+    justify-content: space-between;
+  }
+
+</style>
+
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <h1>Angular Bootstrap</h1>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="heading-area mt-4">
+        <span>Welcome, {{ firstname }}</span>
+        <span>Group {{group}}</span>
+      </h2>
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3">
+      <!-- User list container -->
+      <div class="user-list-container">
+        <h3>Members</h3>
+        <!-- List of users goes here -->
+        <ul *ngFor="let user of users">
+          <li>{{ user.firstname + ' ' + user.lastname }}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="chat-container">
+        <div class="chat-messages">
+          <div *ngFor="let msg of messages" >
+          
+            <!-- Chat messages go here -->
+          <div class="message" [ngClass]="{'right': msg.userId === userId, 'left': msg.userId !== userId}">
+            <span class="user">{{ msg.userId !== userId ? msg.user : "" }}</span>
+            
+            <img *ngIf="msg.isImage" [src]="msg.image" alt="Received Image">
+            <span *ngIf="!msg.isImage" class="text">{{ msg.message }}</span>
+          </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div class="message-input">
-    <input [(ngModel)]="message" placeholder="Type a message" (keydown.enter)="sendMessage()" />
-    <button (click)="sendMessage()">Send</button>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" [(ngModel)]="message" placeholder="Type a message" (keydown.enter)="sendMessage()" aria-describedby="send-button">
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button" id="send-button" (click)="sendMessage()">Send</button>
+        </div>
+        <div class="input-group-append">
+          <label class="input-group-text" for="image-upload">
+            <i class="bi bi-image"></i> <!-- Bootstrap icon for image -->
+          </label>
+        </div>
+      </div>
+      <input type="file" class="custom-file-input" id="image-upload" (change)="onFileSelected($event)" accept="image/*" hidden>
+      
+      <button (click)="sendImage()">Send Image</button>
+    </div>
   </div>
 </div>
- -->
- <div>
-  <h2>Welcome, {{ firstname }}</h2>
-</div>
+<div class="container py-3">
+  <div class="row my-3">
+    <div class="video-controls">
+      <button (click)="joinVideoCall()" class="btn btn-primary">Start Video Call</button>
+    </div>
+  </div>
 
-<div class="chat-container">
-  <div class="chat-messages">
-    <div *ngFor="let msg of messages">
-      <div class="message">
-        <span class="user">{{ msg.user }}:</span>
-        <ng-container *ngIf="msg.isImage">
-          <img [src]="msg.image" alt="Received Image">
-        </ng-container>
-        <ng-container *ngIf="!msg.isImage">
-          <span class="text">{{ msg.message }}</span>
-        </ng-container>
+  <div class="row my-3">
+    <div class="video-container">
+      <div *ngFor="let remoteVideo of remoteVideos" class="col-md-6">
+        <video [srcObject]="remoteVideo" autoplay class="img-fluid"></video>
       </div>
     </div>
   </div>
-  <div class="message-input">
-    <input type="file" (change)="onFileSelected($event)" accept="image/*">
-    <button (click)="sendImage()">Send Image</button>
-    <input [(ngModel)]="message" placeholder="Type a message" (keydown.enter)="sendMessage()" />
-    <button (click)="sendMessage()">Send</button>
-  </div>
-</div>
-
-
-<!-- Video container to display remote video streams 
-<div class="video-container">
-  <div *ngFor="let remoteVideo of remoteVideos">
-    <video [srcObject]="remoteVideo" autoplay></video>
-  </div>
-</div>
-<div class="video-controls">
-  <button (click)="startVideoCall()" [disabled]="videoCallId">Start Video Call</button>
-</div>
-
-
-<div class="video-container">
-  <div *ngFor="let remoteVideo of remoteVideos" class="col-md-6">
-    <video [srcObject]="remoteVideo" autoplay class="img-fluid"></video>
-  </div>
-</div>
-
-<div class="video-controls">
-  <button (click)="joinVideoCall()" class="btn btn-primary">Start Video Call</button>
-</div>
-
--->
-
-<div class="video-container">
-  <div *ngFor="let remoteVideo of remoteVideos" class="col-md-6">
-    <video [srcObject]="remoteVideo" autoplay class="img-fluid"></video>
-  </div>
-</div>
-
-<div class="video-controls">
-  <button (click)="joinVideoCall()" class="btn btn-primary">Start Video Call</button>
 </div>
 
 
