@@ -35,4 +35,14 @@ var loginUserControllerFn = async (req, res) => {
     }
 }
 
-module.exports = {createUserControllerFn, loginUserControllerFn};
+var getAllUsersControllerFn = async (req, res) => {
+    try {
+        const users = await userService.getAllUsersDBService();
+        res.send({ "status": true, "users": users, "message": "All users retrieved successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ "status": false, "message": "Internal Server Error" });
+    }
+}
+
+module.exports = {createUserControllerFn, loginUserControllerFn, getAllUsersControllerFn};

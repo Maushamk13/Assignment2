@@ -38,12 +38,6 @@ export class LoginComponent {
       .subscribe((response: any) => {
         if (response && response.status) {
           const user = response.user;
-  
-          // Store user data in local storage
-          localStorage.setItem('userId', user._id);
-          localStorage.setItem('email', user.email);
-          localStorage.setItem('firstname', user.firstname);
-  
           // Redirect to the chat page
           this.router.navigateByUrl(`/chat/${user._id}`);
         } else {

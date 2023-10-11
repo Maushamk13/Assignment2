@@ -12,8 +12,8 @@ export class SignupComponent {
   email: string = "";
   password: string = "";
   role: string = "";
-  group: number = 0; 
-
+  selectedGroups: number[] = [];
+  groupNumbers: number[] = Array.from({ length: 10 }, (_, i) => i + 1); // Generate numbers from 1 to 10
   constructor(private http: HttpClient)
   {
   }
@@ -30,12 +30,13 @@ export class SignupComponent {
       "email": this.email,
       "password": this.password,
       "role": this.role,
-      "group": this.group,
+      "group": this.selectedGroups,
     };
     this.http.post("http://localhost:3000/user/create",bodyData).subscribe((resultData: any)=>
     {
       console.log(resultData);
       alert("User Registered Successfully")
+      console.log(bodyData);
     });
   }
   save()

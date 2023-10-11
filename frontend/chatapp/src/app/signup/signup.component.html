@@ -59,8 +59,10 @@
                             </div>
                             <div class="form-group">
                                 <label for="group">Group:</label>
-                                <input type="number" class="form-control" id="group" name="group" [(ngModel)]="group" [ngModelOptions]="{standalone: true}" required>
-                            </div>
+                                <select class="form-control" id="group" name="group" [(ngModel)]="selectedGroups" multiple required>
+                                    <option *ngFor="let groupNum of groupNumbers" [value]="groupNum">{{ groupNum }}</option>
+                                </select>
+                            </div>                            
                             <button type="submit" class="btn btn-primary btn-block">Sign up</button>
                         </form>
                     </div>

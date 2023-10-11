@@ -54,5 +54,15 @@ module.exports.loginUserDBService = async (userDetails) => {
     }
 };
 
+module.exports.getAllUsersDBService = async () => {
+    try {
+        const users = await userModel.find({}).exec();
+        return users;
+    } catch (error) {
+        console.error("Error in getAllUsersDBService:", error);
+        throw error;
+    }
+}
+
 
 

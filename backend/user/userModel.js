@@ -24,7 +24,7 @@ var userSchema = new Schema({
         required: true
     },
     group:{
-        type: Number,
+        type: Array,
         required: true
     }
 
